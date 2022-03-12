@@ -1,41 +1,33 @@
 #include <string>
-#include <vector>
 #include <cmath>
-
+#include <iostream>
 using namespace std;
 
-string toBinary(int n, int x){
-    string ans;
-    for(int i=n-1;i>=0;i--){
-        int tmp=pow(2,i);
-        if(x>=tmp){
-            ans+='1';
-            x-=tmp;
-        }
-        else ans+='0';
-    }
-    return ans;
-}
-
-string comp(int n, string x, string y){
-    string ans;
-    for(int i=0;i<n;i++){
-        if(x[i]=='1' || y[i]=='1')
-            ans+='#';
-        else ans+=' ';
-    }
-    return ans;
-}
-
-vector<string> solution(int n, vector<int> arr1, vector<int> arr2) {
-    vector<string> answer;
+int solution(string dartResult) {
+    int answer = 0;
+    int star=0;
+    int nowScore=0;
     
-    for(int i=0;i<n;i++){
-        string x=toBinary(n,arr1[i]);
-        string y=toBinary(n,arr2[i]);
-        string tmp=comp(n,x,y);
-        answer.push_back(tmp);
+    for(int i=0;dartResult[i]!='\0';i++){
+        if(dartResult[i]-'0'>=0 && dartResult[i]-'0'<=9){
+            answer+=nowScore;
+            star=nowScore;
+            if(dartResult[i]=='1' && dartResult[i+1]=='0'){
+                nowScore=10;
+                i++;
+            }
+            else nowScore=dartResult[i]-'0';
+           
+        }
         
+        else if(dartResult[i]=='D') nowScore=pow(nowScore,2);
+        else if(dartResult[i]=='T') nowScore=pow(nowScore,3);
+        else if(dartResult[i]=='*'){
+            nowScore*=2;
+            answer+=star;
+        }
+        else if(dartResult[i]=='#') nowScore*=-1;  
     }
+    answer+=nowScore;
     return answer;
 }
